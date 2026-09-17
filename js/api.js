@@ -59,10 +59,13 @@ async function apiRequest(endpoint, method = 'GET', body = null, requiresAuth = 
   }
 
   if (requiresAuth) {
-    const token = Auth.getToken();
+    let token = Auth.getToken();
     if (!token) {
       throw new Error('Debes iniciar sesión para realizar esta acción.');
     }
+    
+    // Sanitización: si ya contenía "Bearer ", se remueve antes de concatenar
+    token = token.replace(/^Bearer\s+/i, '').trim();
     headers['Authorization'] = `Bearer ${token}`;
   }
 
