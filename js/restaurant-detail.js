@@ -188,15 +188,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reviewForm) {
       reviewForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        // Validar si hay sesión activa antes de enviar
+        const token = Auth.getToken();
+        if (!token) {
+          showAlert('Debes iniciar sesión para publicar una reseña.', 'error');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1500);
+          return;
+        }
+
         const btn = document.getElementById('btn-submit-review');
         const calificacion = document.getElementById('calificacion').value;
         const comentario = document.getElementById('comentario').value.trim();
-
-        // Obtener ID desde la variable global o desde el input oculto
         const targetId = window.currentRestaurantId || document.getElementById('hidden-restaurant-id')?.value;
 
         if (!targetId) {
-          showAlert('Error crítico: No se encontró el ID del restaurante en la vista actual.');
+          showAlert('Error: No se encontró el ID del restaurante.', 'error');
           return;
         }
 
@@ -210,16 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
           btn.disabled = true;
           btn.textContent = 'Publicando...';
 
+          // El 4to argumento 'true' asegura que se adjunte el header Authorization: Bearer <token>
           await apiRequest('/reviews', 'POST', payload, true);
 
-          showAlert('¡Reseña registrada exitosamente y ranking recalculado!', 'success');
+          showAlert('¡Reseña registrada con éxito!', 'success');
           reviewForm.reset();
 
-          // Recargar datos en vivo
           await loadRestaurant();
           await loadReviews();
         } catch (err) {
-          showAlert(err.message || 'Error al enviar la reseña');
+          showAlert(err.message || 'Error al enviar la reseña', 'error');
         } finally {
           btn.disabled = false;
           btn.textContent = 'Publicar Reseña';
