@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodieRank - Descubre, Califica y Saborea Guatemala</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    /* Hero Section */
+    .hero-landing {
+      position: relative;
+      padding: 100px 20px 80px;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(193, 39, 45, 0.15) 0%, rgba(18, 18, 20, 0) 70%);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 183, 3, 0.12);
+      border: 1px solid rgba(255, 183, 3, 0.35);
+      color: var(--accent-gold);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero-landing h1 {
+      font-size: 3.4rem;
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 20px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-landing h1 span {
+      color: var(--primary);
+      text-shadow: 0 0 25px rgba(193, 39, 45, 0.4);
+    }
+    .hero-landing p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 650px;
+      margin: 0 auto 35px;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 35px 25px;
+      margin-top: -30px;
+      position: relative;
+      z-index: 10;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      text-align: center;
+    }
+    .stat-item h3 {
+      font-size: 2.2rem;
+      color: var(--accent-gold);
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+    .stat-item p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+
+    /* Sección Títulos */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .section-header h2 {
+      font-size: 1.9rem;
+      color: var(--text-primary);
+    }
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Grillas */
+    .top-restaurants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      margin-bottom: 70px;
+    }
+    .recent-reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 70px;
+    }
+
+    /* CTA para Restaurantes */
+    .partner-banner {
+      background: linear-gradient(135deg, #1e1e24 0%, #151518 100%);
+      border: 1px solid rgba(193, 39, 45, 0.35);
+      border-radius: var(--radius);
+      padding: 45px 35px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      margin-bottom: 60px;
+    }
+    .partner-banner h3 {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+    .partner-banner p {
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 25px;
+      font-size: 0.98rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegación Global -->
+  <header>
+    <div class="container nav-bar">
+      <a href="index.html" class="logo">Foodie<span>Rank</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="restaurants.html">Explorar</a></li>
+          <li id="nav-user-actions"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 1. Hero Principal -->
+  <section class="hero-landing">
+    <div class="container">
+      <div class="hero-badge">🇬🇹 La Guía Gastronómica Auténtica de Guatemala</div>
+      <h1>El sabor no miente: <span>descubre restaurantes</span> calificados sin trampas</h1>
+      <p>Opiniones verificadas, fotos reales y un algoritmo de ranking ponderado que premia la calidad y la verdad.</p>
+      <div class="hero-cta">
+        <a href="restaurants.html" class="btn btn-primary" style="padding: 14px 32px; font-size: 1rem;">Explorar Restaurantes</a>
+        <a href="register.html" class="btn btn-secondary" style="padding: 14px 30px; font-size: 1rem;">Crear Cuenta Gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="container">
+    <!-- 2. Barra de Métricas en Vivo -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <h3 id="stat-count-restaurants">8</h3>
+        <p>Restaurantes Selectos</p>
+      </div>
+      <div class="stat-item">
+        <h3 id="stat-count-dishes">24+</h3>
+        <p>Platillos Evaluados</p>
+      </div>
+      <div class="stat-item">
+        <h3 id="stat-count-reviews">32+</h3>
+        <p>Reseñas de la Comunidad</p>
+      </div>
+      <div class="stat-item">
+        <h3 style="color: var(--accent-green);">100%</h3>
+        <p>ACID & Algoritmo Transparente</p>
+      </div>
+    </div>
+
+    <!-- 3. Top Restaurantes Mejor Rankeados -->
+    <section style="margin-top: 70px;">
+      <div class="section-header">
+        <div>
+          <h2>🏆 Los Favoritos del Ranking</h2>
+          <p>Lugares con las más altas calificaciones ponderadas por la comunidad foodie</p>
+        </div>
+        <a href="restaurants.html" style="color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.95rem;">
+          Ver todos los restaurantes →
+        </a>
+      </div>
+      <div id="top-restaurants-container" class="top-restaurants-grid">
+        <!-- Renderizado dinámico desde js/index.js -->
+      </div>
+    </section>
+
+    <!-- 4. Reseñas Recientes de la Comunidad -->
+    <section>
+      <div class="section-header">
+        <div>
+          <h2>💬 Críticas Recientes</h2>
+          <p>Las últimas impresiones compartidas por los amantes de la buena mesa</p>
+        </div>
+      </div>
+      <div id="recent-reviews-container" class="recent-reviews-grid">
+        <!-- Renderizado dinámico desde js/index.js -->
+      </div>
+    </section>
+
+    <!-- 5. CTA Dual para Restaurantes / Negocios -->
+    <section class="partner-banner">
+      <span class="badge badge-gold" style="margin-bottom: 12px;">Para Propietarios y Chefs</span>
+      <h3>¿Tienes un restaurante o cafetería en Guatemala?</h3>
+      <p>Únete a FoodieRank, da a conocer tu menú con fotografías impecables y deja que tus comensales eleven tu reputación de forma orgánica y transparente.</p>
+      <a href="login.html" id="cta-registrar-restaurante" class="btn btn-primary" style="padding: 12px 28px;">
+        Registrar mi Restaurante
+      </a>
+    </section>
+  </main>
+
+  <footer style="background-color: var(--bg-surface); border-top: 1px solid var(--border-subtle); padding: 30px 20px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+    <p>FoodieRank © 2026 — Plataforma Gastronómica de Evaluación y Rankings.</p>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
