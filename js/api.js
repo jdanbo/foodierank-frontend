@@ -21,31 +21,49 @@ const Auth = {
 };
 
 // Cliente HTTP reutilizable con fetch()
-async function apiRequest(endpoint, method = 'GET', body = null, requireAuth = false) {
-  const headers = { 'Content-Type': 'application/json' };
+async function apiRequest(endpoint, method = 'GET', body = null, requiresAuth = false) {
+  const headers = {};
 
-  if (requireAuth) {
-    const token = Auth.getToken();
-    if (!token) {
-      window.location.href = 'login.html';
-      throw new Error('No autenticado');
-    }
-    headers['Authorization'] = token;
-  }
-
-  const config = { method, headers };
   if (body) {
-    config.body = JSON.stringify(body);
+    headers['Content-Type'] = 'application/json';
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Error en la petición');
+  if (requiresAuth) {
+    const token = Auth.getToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
   }
 
-  return data;
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null
+    });
+
+    // Validar si la respuesta es realmente JSON antes de parsear
+    const contentType = response.headers.get('content-type');
+    let data;
+
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      // Si el servidor devolvió HTML (error 404 de Express o pantalla de Render)
+      const textError = await response.text();
+      console.error(`[Error no-JSON del servidor en ${endpoint}]:`, textError);
+      throw new Error(`El servidor respondió con estado ${response.status} (no devolvió JSON). Revisa la consola.`);
+    }
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Error en la petición');
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Error en API (${endpoint}):`, error.message);
+    throw error;
+  }
 }
 
 function renderNav() {
