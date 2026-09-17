@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodieRank - Explorar Restaurantes</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .restaurant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+    }
+    .restaurant-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .restaurant-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: var(--bg-input);
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .rating-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegación Global -->
+  <header>
+    <div class="container nav-bar">
+      <a href="index.html" class="logo">Foodie<span>Rank</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="restaurants.html" class="active">Restaurantes</a></li>
+          <li id="nav-user-actions"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 40px 20px;">
+    <!-- Barra de Filtros y Ordenamiento -->
+    <section class="toolbar">
+      <div>
+        <h1 style="font-size: 2rem; margin-bottom: 5px;">Explorar Restaurantes</h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Descubre lugares aprobados y calificados por la comunidad</p>
+      </div>
+
+      <div class="filters">
+        <select id="category-filter" class="form-control" style="width: auto; min-width: 180px;">
+          <option value="">Todas las categorías</option>
+        </select>
+
+        <select id="sort-filter" class="form-control" style="width: auto;">
+          <option value="ranking-desc">Mayor Ranking</option>
+          <option value="reviews-desc">Más Reseñas</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Feedback / Alertas -->
+    <div id="status-message" class="alert"></div>
+
+    <!-- Cuadrícula de Tarjetas -->
+    <section id="restaurants-grid" class="restaurant-grid">
+      <!-- Inyección dinámica desde restaurants.js -->
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/restaurants.js"></script>
+</body>
+</html>
