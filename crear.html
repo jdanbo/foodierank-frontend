@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodieRank - Registrar Restaurante o Plato</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 10px;
+    }
+    .choice-card {
+      cursor: pointer;
+      text-align: center;
+      padding: 35px 20px;
+      transition: var(--transition);
+      border: 1px solid var(--border-subtle);
+    }
+    .choice-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+    }
+    .choice-card .choice-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .choice-card h3 {
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .choice-card p {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+    .form-section {
+      display: none;
+    }
+    .form-divider {
+      border-top: 1px solid var(--border-subtle);
+      margin: 28px 0 20px;
+      padding-top: 20px;
+    }
+    .form-divider h3 {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+    .form-divider p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+    .btn-back:hover {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegación Global -->
+  <header>
+    <div class="container nav-bar">
+      <a href="index.html" class="logo">Foodie<span>Rank</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="restaurants.html">Restaurantes</a></li>
+          <li id="nav-user-actions"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 40px 20px; max-width: 720px; margin: 0 auto;">
+    <div id="page-alert" class="alert"></div>
+
+    <!-- PASO 1: Elegir qué registrar -->
+    <section id="choice-section">
+      <h1 style="font-size: 1.8rem; margin-bottom: 6px;">¿Qué deseas registrar?</h1>
+      <p style="color: var(--text-secondary); margin-bottom: 10px;">
+        Todo lo que envíes aquí pasa primero por revisión de un administrador antes de aparecer públicamente.
+      </p>
+
+      <div class="choice-grid">
+        <div class="card choice-card" id="btn-choice-restaurant">
+          <span class="choice-icon">🏬</span>
+          <h3>Un Restaurante Nuevo</h3>
+          <p>Registra tu negocio junto con su primer plato (obligatorio).</p>
+        </div>
+        <div class="card choice-card" id="btn-choice-dish">
+          <span class="choice-icon">🍽️</span>
+          <h3>Un Plato Nuevo</h3>
+          <p>Agrega un plato a un restaurante que ya hayas registrado tú.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PASO 2A: Formulario de Restaurante + Primer Plato -->
+    <section id="restaurant-form-section" class="form-section card">
+      <button type="button" class="btn-back" data-back>← Volver</button>
+      <h2 style="margin-bottom: 4px;">Registrar Restaurante</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+        Completa los datos de tu restaurante y de su primer plato.
+      </p>
+
+      <form id="restaurant-form">
+        <div class="form-group">
+          <label for="r-nombre">Título del Restaurante</label>
+          <input type="text" id="r-nombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="r-descripcion">Descripción</label>
+          <textarea id="r-descripcion" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="r-categoria">Categoría</label>
+          <select id="r-categoria" class="form-control" required>
+            <option value="">Selecciona una categoría</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="r-ubicacion">Ubicación</label>
+          <input type="text" id="r-ubicacion" class="form-control" placeholder="Ej. Zona 10, Guatemala" required>
+        </div>
+        <div class="form-group">
+          <label for="r-horario">Horario</label>
+          <input type="text" id="r-horario" class="form-control" placeholder="Ej. Lunes a Domingo: 08:00 AM - 09:00 PM" required>
+        </div>
+        <div class="form-group">
+          <label for="r-imagen">Imagen (URL)</label>
+          <input type="url" id="r-imagen" class="form-control" placeholder="https://..." required>
+        </div>
+
+        <div class="form-divider">
+          <h3>🍽️ Tu Primer Plato</h3>
+          <p>Todo restaurante nuevo debe registrarse con al menos un plato.</p>
+
+          <div class="form-group">
+            <label for="rp-nombre">Nombre del Plato</label>
+            <input type="text" id="rp-nombre" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="rp-descripcion">Descripción del Plato</label>
+            <textarea id="rp-descripcion" class="form-control" rows="2" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="rp-precio">Precio (Q)</label>
+            <input type="number" id="rp-precio" class="form-control" step="0.01" min="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="rp-imagen">Imagen del Plato (URL, opcional)</label>
+            <input type="url" id="rp-imagen" class="form-control" placeholder="https://...">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-submit-restaurant" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Enviar para Aprobación
+        </button>
+      </form>
+    </section>
+
+    <!-- PASO 2B: Formulario de Plato para restaurante existente -->
+    <section id="dish-form-section" class="form-section card">
+      <button type="button" class="btn-back" data-back>← Volver</button>
+      <h2 style="margin-bottom: 4px;">Registrar un Plato</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+        Elige a cuál de tus restaurantes pertenece este plato.
+      </p>
+
+      <form id="dish-form">
+        <div class="form-group">
+          <label for="d-restaurante">Tu Restaurante</label>
+          <select id="d-restaurante" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label for="d-nombre">Nombre del Plato</label>
+          <input type="text" id="d-nombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="d-descripcion">Descripción</label>
+          <textarea id="d-descripcion" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="d-precio">Precio (Q)</label>
+          <input type="number" id="d-precio" class="form-control" step="0.01" min="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="d-imagen">Imagen del Plato (URL, opcional)</label>
+          <input type="url" id="d-imagen" class="form-control" placeholder="https://...">
+        </div>
+
+        <button type="submit" id="btn-submit-dish" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+          Enviar para Aprobación
+        </button>
+      </form>
+    </section>
+
+    <!-- PASO 2B (alterno): El usuario todavía no tiene ningún restaurante propio -->
+    <section id="no-restaurant-section" class="form-section card" style="text-align: center;">
+      <button type="button" class="btn-back" data-back>← Volver</button>
+      <span class="choice-icon" style="font-size: 2.5rem; display: block; margin-bottom: 12px;">🚫</span>
+      <h2 style="margin-bottom: 8px;">Todavía no tienes un restaurante</h2>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+        Para registrar un plato primero necesitas tener al menos un restaurante propio registrado.
+      </p>
+      <button type="button" id="btn-go-create-restaurant" class="btn btn-primary">
+        Registrar mi Restaurante
+      </button>
+    </section>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/crear.js"></script>
+</body>
+</html>

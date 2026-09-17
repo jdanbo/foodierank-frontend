@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodieRank - Detalle del Restaurante</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .restaurant-header {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    @media (min-width: 768px) {
+      .restaurant-header {
+        grid-template-columns: 450px 1fr;
+      }
+    }
+    .detail-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    .dish-card {
+      background-color: var(--bg-surface);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+    }
+    .review-item {
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 18px 0;
+    }
+    .review-item:last-child {
+      border-bottom: none;
+    }
+    .vote-btn {
+      background: none;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+    .vote-btn:hover {
+      border-color: var(--primary);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra de Navegación Global -->
+  <header>
+    <div class="container nav-bar">
+      <a href="index.html" class="logo">Foodie<span>Rank</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="restaurants.html">Restaurantes</a></li>
+          <li id="nav-user-actions"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 40px 20px; flex: 1;">
+    <div id="detail-alert" class="alert"></div>
+
+    <!-- Cabecera del Restaurante -->
+    <section id="restaurant-info" class="restaurant-header">
+      <!-- Renderizado dinámico -->
+    </section>
+
+    <!-- Sección de Platos -->
+    <section style="margin-bottom: 50px;">
+      <h2 style="font-size: 1.5rem; margin-bottom: 10px; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 4px;">
+        Platos Destacados
+      </h2>
+      <div id="dishes-container" class="dishes-grid">
+        <!-- Renderizado dinámico -->
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: 40px;">
+      <!-- Formulario para agregar reseña -->
+      <section id="review-form-section" class="card" style="display: none;">
+        <h3 style="margin-bottom: 15px;">Deja tu Calificación</h3>
+        <form id="add-review-form">
+          <!-- Campo oculto blindado para el ID del restaurante -->
+          <input type="hidden" id="hidden-restaurant-id" name="restauranteId" value="">
+          <div class="form-group">
+            <label for="calificacion">Calificación (1 a 5 estrellas)</label>
+            <select id="calificacion" class="form-control" style="cursor: pointer;" required>
+              <option value="5">★★★★★ (5 - Excelente)</option>
+              <option value="4">★★★★☆ (4 - Muy Bueno)</option>
+              <option value="3">★★★☆☆ (3 - Aceptable)</option>
+              <option value="2">★★☆☆☆ (2 - Regular)</option>
+              <option value="1">★☆☆☆☆ (1 - Malo)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comentario">Tu Opinión</label>
+            <textarea id="comentario" class="form-control" rows="3" placeholder="¿Qué tal estuvo la comida y el servicio?" maxlength="500" required></textarea>
+          </div>
+          <button type="submit" id="btn-submit-review" class="btn btn-primary">Publicar Reseña</button>
+        </form>
+      </section>
+
+      <!-- Mensaje si no está logueado -->
+      <div id="login-prompt" class="card" style="text-align: center; display: none;">
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">Inicia sesión para calificar este restaurante y opinar.</p>
+        <a href="login.html" class="btn btn-secondary">Ingresar para Calificar</a>
+      </div>
+
+      <!-- Listado de Reseñas y Votos -->
+      <section class="card">
+        <h3 style="margin-bottom: 15px;">Reseñas de la Comunidad</h3>
+        <div id="reviews-list">
+          <!-- Renderizado dinámico -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/restaurant-detail.js"></script>
+</body>
+</html>

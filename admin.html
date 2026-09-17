@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodieRank - Panel Maestro</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .admin-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 25px;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+    .data-table th, .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .data-table th {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .filter-bar {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .action-group {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+    .btn-danger {
+      background-color: rgba(220, 38, 38, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(220, 38, 38, 0.4);
+    }
+    .btn-danger:hover {
+      background-color: #dc2626;
+      color: #fff;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal.show { display: flex; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      width: 100%; max-width: 550px;
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav-bar">
+      <a href="index.html" class="logo">Foodie<span>Rank</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="restaurants.html">Ver Portal</a></li>
+          <li id="nav-user-actions"></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 30px 20px; flex: 1;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <div>
+        <h1 style="font-size: 2rem;">Panel de Control y Moderación</h1>
+        <p style="color: var(--text-secondary); font-size: 0.9rem;">Administración integral de la plataforma gastronómica</p>
+      </div>
+      <span class="badge badge-gold">Administrador Master</span>
+    </div>
+
+    <div id="admin-alert" class="alert"></div>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="admin-tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-moderacion')">📥 Aprobaciones Pendientes</button>
+      <button class="tab-btn" onclick="switchTab('tab-restaurantes')">🍽️ Gestión de Restaurantes</button>
+      <button class="tab-btn" onclick="switchTab('tab-categorias')">🏷️ Categorías</button>
+      <button class="tab-btn" onclick="switchTab('tab-resenas')">⭐ Moderación de Reseñas</button>
+    </nav>
+
+    <!-- 1. PESTAÑA: MODERACIÓN PENDIENTES -->
+    <section id="tab-moderacion" class="tab-content active">
+      <div class="card" style="margin-bottom: 25px;">
+        <h2 style="font-size: 1.2rem; margin-bottom: 15px;">Restaurantes por Aprobar</h2>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-pending-restaurants"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size: 1.2rem; margin-bottom: 15px;">Platillos por Aprobar</h2>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Platillo</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-pending-dishes"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PESTAÑA: GESTIÓN DE RESTAURANTES (CRUD) -->
+    <section id="tab-restaurantes" class="tab-content">
+      <div class="card">
+        <div class="filter-bar">
+          <div style="display: flex; gap: 10px; flex: 1; max-width: 500px;">
+            <input type="text" id="rest-search" class="form-control" placeholder="Buscar por nombre o ubicación...">
+            <select id="rest-cat-filter" class="form-control" style="width: 200px;">
+              <option value="">Todas las categorías</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openRestaurantModal()">+ Nuevo Restaurante</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Rating</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-all-restaurants"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PESTAÑA: CATEGORÍAS (CRUD) -->
+    <section id="tab-categorias" class="tab-content">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 25px;">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2>Categorías Registradas</h2>
+            <button class="btn btn-primary btn-sm" onclick="openCategoryModal()">+ Nueva Categoría</button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-categories"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. PESTAÑA: RESEÑAS (CRUD) -->
+    <section id="tab-resenas" class="tab-content">
+      <div class="card">
+        <div class="filter-bar">
+          <input type="text" id="review-search" class="form-control" placeholder="Filtrar por restaurante, autor o comentario..." style="max-width: 400px;">
+          <select id="review-stars-filter" class="form-control" style="width: 180px;">
+            <option value="">Todas las estrellas</option>
+            <option value="5">5 Estrellas</option>
+            <option value="4">4 Estrellas</option>
+            <option value="3">3 Estrellas</option>
+            <option value="2">2 Estrellas</option>
+            <option value="1">1 Estrella</option>
+          </select>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Restaurante</th>
+                <th>Usuario</th>
+                <th>Rating</th>
+                <th>Comentario</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-all-reviews"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: RESTAURANTE (CREAR / EDITAR) -->
+  <div id="modal-restaurant" class="modal">
+    <div class="modal-box">
+      <h3 id="modal-rest-title" style="margin-bottom: 18px;">Restaurante</h3>
+      <form id="form-restaurant">
+        <input type="hidden" id="edit-rest-id">
+        <div class="form-group">
+          <label>Nombre del Restaurante</label>
+          <input type="text" id="rest-name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Categoría</label>
+          <select id="rest-category-select" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Ubicación / Dirección</label>
+          <input type="text" id="rest-address" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Horario de Atención</label>
+          <input type="text" id="rest-schedule" class="form-control" placeholder="Ej. Lun a Dom: 08:00 AM - 10:00 PM">
+        </div>
+        <div class="form-group">
+          <label>URL Foto Fachada Principal</label>
+          <input type="url" id="rest-img" class="form-control" placeholder="https://images.unsplash.com/...">
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="rest-desc" class="form-control" rows="3" required></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-restaurant')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CATEGORÍA (CREAR / EDITAR) -->
+  <div id="modal-category" class="modal">
+    <div class="modal-box">
+      <h3 id="modal-cat-title" style="margin-bottom: 18px;">Categoría</h3>
+      <form id="form-category">
+        <input type="hidden" id="edit-cat-id">
+        <div class="form-group">
+          <label>Nombre de Categoría</label>
+          <input type="text" id="cat-name-input" class="form-control" required minlength="3">
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="cat-desc-input" class="form-control" rows="3"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-category')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
