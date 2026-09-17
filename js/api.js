@@ -1,5 +1,6 @@
 // const API_BASE_URL = 'http://localhost:8000/api/v1';
-const API_BASE_URL = 'https://foodierank-backend-glkt.onrender.com';
+// const API_BASE_URL = 'https://foodierank-backend-glkt.onrender.com';
+const API_BASE_URL = 'https://foodierank-backend-glkt.onrender.com/api/v1';
 
 // Helpers para gestionar el token y usuario
 const Auth = {
